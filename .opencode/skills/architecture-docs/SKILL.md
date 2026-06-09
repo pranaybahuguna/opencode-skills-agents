@@ -5,7 +5,7 @@ license: MIT
 compatibility: opencode
 metadata:
   audience: developers
-=---
+---
 
 ## Full documentation pass
 
