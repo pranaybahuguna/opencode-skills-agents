@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+#
+# pre-commit — keeps docs in lockstep with code at commit time.
+# Install with:  git config core.hooksPath githooks
+#
+set -euo pipefail
+
+# Only run if source files are staged.
+if git diff --cached --name-only --diff-filter=ACMR -- "src/" | grep -q .; then
+  echo "Source changes staged — refreshing docs..."
+  scripts/refresh-docs.sh --staged
+  # Stage any docs the agent updated so they go into the same commit.
+  git add docs/
+fi

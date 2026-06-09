@@ -1,0 +1,19 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "permission": {
+    "skill": {
+      "*": "allow"
+    }
+  },
+  "agent": {
+    "docs": {
+      "description": "Maintains living architecture docs under ./docs",
+      "mode": "subagent",
+      "permission": {
+        "skill": {
+          "architecture-docs": "allow"
+        }
+      }
+    }
+  }
+}
