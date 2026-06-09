@@ -151,18 +151,15 @@ which modules are involved and in what order. 1-2 flows maximum here.
 - docs/architecture/overview.md owns cross-module dependencies and the system map.
 
 
-## Diagram evidence rules (addition to Mermaid conventions)
+## Diagram honesty rules
 
-Every participant in every diagram must be verified before it is drawn.
+Draw diagrams that are rich and informative, based on what the code shows.
 
-- **Sequence diagrams**: each participant must be an actual Java class, Spring
-  bean, or external system explicitly configured in this repository. Check
-  the source before adding a participant. If you find `AdminService.java`,
-  you may add AdminService. If you find no nginx.conf or proxy config, do
-  not add Nginx.
-- **Flowcharts**: each node must be a real module, class, or system found in
-  source or config. Do not add assumed infrastructure.
-- **Edge labels**: use actual method names or endpoint paths you read in the
-  source. Do not invent operation names.
-- **When a component is uncertain**: omit it from the diagram and note it as
-  an open question in the page text instead.
+- **Participants**: use actual Java classes, Spring beans, and modules you
+  find in source. Use actual endpoint paths from @RequestMapping annotations.
+  Do not add external infrastructure (NGINX, brokers, gateways) unless a
+  config file in the repo proves they exist.
+- **Edge labels**: use real method names or endpoint paths from the source.
+- **Uncertain components**: if an external system is referenced but not
+  configured locally, show it with a note "(external — not configured in repo)"
+  rather than omitting it entirely.
