@@ -226,6 +226,43 @@
   max-width: 100%;
 }
 
+/* ── Diagram toolbar ─────────────────────────────────────── */
+.mermaid-container {
+  position: relative;
+  display: block;
+}
+
+.mermaid-toolbar {
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.mermaid-container:hover .mermaid-toolbar {
+  opacity: 1;
+}
+
+.mermaid-toolbar-btn {
+  background: rgba(0, 191, 165, 0.12);
+  border: 1px solid var(--terminal-teal, #00bfa5);
+  border-radius: 4px;
+  color: var(--terminal-teal, #00bfa5);
+  padding: 4px 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
+}
+
+.mermaid-toolbar-btn:hover {
+  background: rgba(0, 191, 165, 0.28);
+}
+
 /* ── Zoom overlay ────────────────────────────────────────── */
 .mermaid-zoom-overlay {
   position: fixed;
