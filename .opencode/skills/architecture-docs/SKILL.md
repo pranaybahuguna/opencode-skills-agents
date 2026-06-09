@@ -5,6 +5,7 @@ license: MIT
 compatibility: opencode
 metadata:
   audience: developers
+  stack: java-angular-oracle
 ---
 
 ## Full documentation pass
@@ -148,3 +149,20 @@ which modules are involved and in what order. 1-2 flows maximum here.
 - If a class or endpoint is deleted, delete its doc section.
 - Per-module overview.md owns that module's internals.
 - docs/architecture/overview.md owns cross-module dependencies and the system map.
+
+
+## Diagram evidence rules (addition to Mermaid conventions)
+
+Every participant in every diagram must be verified before it is drawn.
+
+- **Sequence diagrams**: each participant must be an actual Java class, Spring
+  bean, or external system explicitly configured in this repository. Check
+  the source before adding a participant. If you find `AdminService.java`,
+  you may add AdminService. If you find no nginx.conf or proxy config, do
+  not add Nginx.
+- **Flowcharts**: each node must be a real module, class, or system found in
+  source or config. Do not add assumed infrastructure.
+- **Edge labels**: use actual method names or endpoint paths you read in the
+  source. Do not invent operation names.
+- **When a component is uncertain**: omit it from the diagram and note it as
+  an open question in the page text instead.
