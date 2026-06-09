@@ -1,6 +1,6 @@
 ---
 name: architecture-docs
-description: Conventions for writing and maintaining this project's living architecture documentation. Covers page structure, design-first module overviews, system-level architectural context, Java/Angular/Oracle style, Mermaid diagram standards, and the full documentation pass procedure.
+description: Conventions for writing and maintaining this project's living architecture documentation. Covers page structure, design-first module overviews, mandatory code flow tracing for Spring/Java modules, system-level architectural context, Mermaid diagram standards, and the full documentation pass procedure.
 license: MIT
 compatibility: opencode
 metadata:
@@ -16,7 +16,7 @@ in order without waiting for further input.
 ### Step 1 — per-module pages
 For each module below, read its source under `./<module>/src` and create or
 update pages under `./docs/<module>/`. Each module needs at minimum an
-`overview.md` following the enriched page anatomy below.
+`overview.md` following the full page anatomy below — every section filled.
 
 Modules in scope:
 - ot-analyzer
@@ -38,128 +38,172 @@ overview structure below.
 
 ---
 
+## How to read a Spring/Java module before writing
+
+Before writing any documentation for a module, do this read pass:
+
+1. Find all `@RestController` or `@Controller` classes — these are the entry
+   points. List every `@GetMapping`, `@PostMapping`, `@PutMapping`,
+   `@DeleteMapping` method with its path and parameters.
+
+2. For each controller, find its `@Autowired` or constructor-injected
+   dependencies. Follow those to the `@Service` classes.
+
+3. For each service method called by the controller, find what it does:
+   what repositories it calls, what transformations it applies, what
+   exceptions it throws.
+
+4. For each `@Repository` or `JpaRepository`, find the custom `@Query`
+   methods and what entities they operate on.
+
+5. Find all `@Entity` classes — these are the data model. Document their
+   key fields and relationships.
+
+6. Find any `@EventListener`, `@Async`, `@Scheduled`, or Feign client
+   usages — these are non-obvious flows that developers consistently miss.
+
+Only after this read pass should you begin writing. The documentation should
+reflect what you found, not what you assume.
+
+---
+
 ## Module overview page anatomy
 
-Every `docs/<module>/overview.md` must follow this structure in order.
-This is the most important page for each module — it should give a new
-developer a genuine understanding of the module, not just a list of classes.
+Every `docs/<module>/overview.md` must follow this structure. Every section
+must be filled. A section left sparse or empty is a documentation failure.
 
 ### 1. One-line summary
-What this module is, in plain language. One sentence maximum.
+What this module is, in one sentence.
 
 ### 2. Why this module exists (Design intent)
-The architectural reason this module was separated out. What would break or
-become unclear if this module didn't exist? What responsibility does it own
-that nothing else should own? Write 2-3 sentences of genuine reasoning, not
-just a restatement of the name.
+The architectural reason this module was separated out. What would break
+if it didn't exist? 2-3 sentences of genuine reasoning.
 
 ### 3. Key concepts
 3-5 domain or technical concepts a new developer must understand before
-working in this module. For each concept, write 2-4 sentences explaining
-what it is, why it matters here, and how it shows up in the code.
+working here. For each: what it is, why it matters, how it appears in code.
+2-4 sentences per concept.
 
-Example format:
-- **Eligibility Rule** — A rule defines the conditions under which an entity
-  qualifies for a given action. In this module, rules are evaluated in a chain;
-  the first rule that matches short-circuits the rest. This keeps business logic
-  declarative and testable without cascading conditionals.
+### 4. Key operation flows (most important section)
 
-### 4. Responsibilities
-4-7 bullets of what this module owns. Be specific.
+This section is the difference between documentation that describes structure
+and documentation that shows what actually runs. It is mandatory.
+
+For the 2-3 most important operations in this module, trace the complete
+execution path as a Mermaid sequence diagram. Follow actual method calls
+from the HTTP entry point to the final side effect (DB write, response, event).
+
+**How to build each diagram:**
+- Start from the `@RequestMapping` method on the controller
+- Use actual class names found in source (e.g. `EligibilityController`)
+- Use actual method names and parameter types from the source
+- Follow the chain: Controller → Service → Repository → Entity/DB
+- Label each arrow with the real data: method name, DTO type, or return type
+- Include async steps, Feign calls, or event publishes if present
+- Show the error path if the exception handling is non-trivial
+
+**Example of what this should look like:**
+```
+sequenceDiagram
+    Client->>EligibilityController: POST /v1/eligibility (EligibilityRequest)
+    EligibilityController->>EligibilityService: evaluate(request)
+    EligibilityService->>RuleRepository: findActiveRules(entityType)
+    RuleRepository-->>EligibilityService: List<Rule>
+    EligibilityService->>EligibilityService: applyChain(rules, request)
+    EligibilityService-->>EligibilityController: EligibilityResult
+    EligibilityController-->>Client: 200 OK (EligibilityResponse)
+```
+
+After each diagram, write 2-3 sentences explaining what the flow does and
+any non-obvious decisions in it (why async? why a separate repository call?).
 
 ### 5. Design patterns applied
-List the patterns deliberately used and briefly explain why each was chosen.
-E.g. Repository (decouples persistence from business logic), Strategy
-(swappable rule implementations), Event-driven (decoupled downstream
-notification). Only list patterns that were a deliberate design decision.
+Patterns deliberately used and why each was chosen. Only list intentional
+design decisions, not incidental patterns.
 
 ### 6. Key types and endpoints
-A table: name | type | purpose. For Java: public services, repositories,
-value objects that matter.
+A table: name | type | purpose. Controllers: list each endpoint path + method.
+Services: list public methods. Repositories: list custom queries. Entities:
+list the key fields. Keep it scannable.
 
 ### 7. How it fits
-How this module connects to the rest of the system: who calls it, what it
+How this module connects to the rest of the system. Who calls it, what it
 calls, what data it reads and writes, what events it publishes or consumes.
+Mention the specific module names, not generic descriptions.
 
 ### 8. Trade-offs and constraints
-What this module deliberately does NOT do, and why. What was consciously
-decided. What known limitations exist.
+What this module deliberately does NOT do. Known limitations. Conscious
+decisions. This is often the most useful section and the most neglected.
 
 ### 9. Open questions / tech debt
-Anything non-obvious, intentionally deferred, or worth flagging.
+Anything non-obvious, deferred, or worth investigating.
 
 ---
 
 ## System overview page (docs/architecture/overview.md)
 
-This is the parent/overall context page. It must give someone new to the
-project a complete mental model of the whole system.
-
-### Structure for overview.md
+### Structure
 
 #### 1. What this system does
-2-3 sentences: the problem being solved, who uses it, what it produces.
+2-3 sentences: the problem, who uses it, what it produces.
 
 #### 2. Architectural principles
-The guiding design decisions that apply across the whole system — the "why"
-behind the module decomposition. Write these as named principles with a
-1-2 sentence explanation of each.
+The guiding design decisions behind the module decomposition. Named
+principles with 1-2 sentence explanations.
 
-#### 3. System map (Mermaid diagram)
-A single flowchart LR showing all modules and their dependencies/calls.
-Use subgraphs to group by layer (API, Core, Data, Config). Label every
-edge with what flows across it.
+#### 3. System map (Mermaid flowchart)
+A `flowchart LR` showing all modules and their dependencies. Use subgraphs
+to group by layer (API, Core, Data, Config). Label edges with what flows
+across them.
 
-#### 4. Module responsibilities at a glance
-A table: module | one-line responsibility | key technology. Quick reference.
+#### 4. End-to-end operational flows
+This is the system-level equivalent of section 4 in the module page.
+Show the 2-3 most important end-to-end flows across modules as sequence
+diagrams. A developer should be able to read these and understand what
+happens from the moment a request enters the system to the moment it
+produces an output. Use actual module names and, where possible, actual
+class/method names from the source.
 
-#### 5. Key cross-cutting concepts
-Concepts that span multiple modules: how configuration is resolved, how
-eligibility feeds into matching, what the shared domain model is and who
-owns it. 3-6 concepts, each 2-4 sentences.
+#### 5. Module responsibilities at a glance
+A table: module | one-line responsibility | key technology.
 
-#### 6. Significant architectural decisions
-The 3-5 most important decisions made in designing this system, with brief
-rationale for each.
+#### 6. Key cross-cutting concepts
+Concepts that span multiple modules. 3-6 concepts, 2-4 sentences each.
 
-#### 7. Key data and event flows
-For the most important end-to-end flows, a Mermaid sequenceDiagram showing
-which modules are involved and in what order. 1-2 flows maximum here.
+#### 7. Significant architectural decisions
+The 3-5 most important decisions made, with brief rationale for each.
 
 ---
 
 ## Style
 
-- Write for a developer new to the codebase. Explain intent, not syntax.
-- Never paste large code blocks. Short illustrative snippets only.
+- Write for a developer who needs to understand what the code does at runtime,
+  not someone reading a class catalogue.
+- Sequence diagrams and operation flows are more valuable than prose lists.
+  Lead with behaviour, follow with structure.
 - Use present tense and active voice.
-- Keep each page scannable: headings, short paragraphs, tables over prose.
-- Precision over completeness: three true things beats ten vague ones.
+- Short paragraphs. Tables for enumerations. Diagrams for flows.
+- Three precise true statements beat ten vague ones.
 
 ## Mermaid conventions
 
-- Architecture: flowchart LR or flowchart TD. Group by layer with subgraphs.
-- Sequences: sequenceDiagram for request flows where ordering matters.
-- Label every edge with what flows across it.
-- Split into sub-diagrams if a diagram exceeds ~12 nodes.
+- Architecture: `flowchart LR` with subgraphs for layers.
+- Flows: `sequenceDiagram` with actual class/method names from source.
+- Label every edge with what flows across it (method name, data type, event).
+- Split into sub-diagrams if a diagram exceeds ~12 participants.
+
+## Diagram honesty rules
+
+- Participants must be actual classes or config-proven external systems.
+- Do not add infrastructure (NGINX, brokers, gateways) unless a config file
+  in this repo proves they exist.
+- If an external system is referenced but not configured locally, show it
+  with a note "(external — not configured in repo)".
+- Use real method names from source. Do not invent operation names.
 
 ## Freshness contract
 
 - When code changes, the page describing it must change in the same pass.
 - If a class or endpoint is deleted, delete its doc section.
-- Per-module overview.md owns that module's internals.
-- docs/architecture/overview.md owns cross-module dependencies and the system map.
-
-
-## Diagram honesty rules
-
-Draw diagrams that are rich and informative, based on what the code shows.
-
-- **Participants**: use actual Java classes, Spring beans, and modules you
-  find in source. Use actual endpoint paths from @RequestMapping annotations.
-  Do not add external infrastructure (NGINX, brokers, gateways) unless a
-  config file in the repo proves they exist.
-- **Edge labels**: use real method names or endpoint paths from the source.
-- **Uncertain components**: if an external system is referenced but not
-  configured locally, show it with a note "(external — not configured in repo)"
-  rather than omitting it entirely.
+- Per-module overview.md owns that module's flows and internals.
+- docs/architecture/overview.md owns cross-module flows and the system map.
