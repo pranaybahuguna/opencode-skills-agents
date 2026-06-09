@@ -226,38 +226,6 @@
   max-width: 100%;
 }
 
-/* ── Maximize button ─────────────────────────────────────── */
-.mermaid-container {
-  position: relative;
-  display: block;
-}
-
-.mermaid-maximize-btn {
-  position: absolute;
-  top: 0.5em;
-  right: 0.5em;
-  background: rgba(0, 191, 165, 0.12);
-  border: 1px solid var(--terminal-teal, #00bfa5);
-  border-radius: 4px;
-  color: var(--terminal-teal, #00bfa5);
-  padding: 4px 6px;
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.15s ease, background 0.15s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-}
-
-.mermaid-container:hover .mermaid-maximize-btn {
-  opacity: 1;
-}
-
-.mermaid-maximize-btn:hover {
-  background: rgba(0, 191, 165, 0.28);
-}
-
 /* ── Zoom overlay ────────────────────────────────────────── */
 .mermaid-zoom-overlay {
   position: fixed;
