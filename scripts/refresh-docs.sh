@@ -1,43 +1,62 @@
 #!/usr/bin/env bash
 #
-# refresh-docs.sh — regenerate docs for changed source files using the OpenCode
-# `docs` subagent. This is the single command behind both the live demo and the
-# git pre-commit hook.
+# refresh-docs.sh (multi-module) — regenerate docs per Maven module using the
+# OpenCode `docs` subagent. Modules in scope are listed in .docmodules.
 #
 # Usage:
-#   scripts/refresh-docs.sh            # docs for files staged for commit
-#   scripts/refresh-docs.sh --since-head  # docs for files changed since last commit
-#   scripts/refresh-docs.sh --all      # full documentation pass
+#   scripts/refresh-docs.sh                # changed modules, staged for commit
+#   scripts/refresh-docs.sh --since-head   # changed modules since last commit
+#   scripts/refresh-docs.sh --all          # full pass over every listed module
+#   scripts/refresh-docs.sh --module payment-service   # force one module
 #
 set -euo pipefail
 
 MODE="${1:---staged}"
-GLOBS=("*.java" "*.ts" "*.html")   # adjust to your stack
+MODULES_FILE="${DOCMODULES:-.docmodules}"
 
-collect() {
+if [[ ! -f "$MODULES_FILE" ]]; then
+  echo "No $MODULES_FILE found at repo root. List one module path per line." >&2
+  exit 2
+fi
+
+# Load module list (portable; skips comments/blank lines — works on bash 3.2+).
+MODULES=()
+while IFS= read -r line; do
+  [[ -n "$line" ]] && MODULES+=("$line")
+done < <(grep -vE '^[[:space:]]*(#|$)' "$MODULES_FILE")
+
+# Single-module override
+if [[ "$MODE" == "--module" ]]; then
+  MODULES=("${2:?give a module path}")
+  MODE="--all"
+fi
+
+changed_in() {  # $1 = module dir → prints changed source files within it
   case "$MODE" in
-    --staged)
-      git diff --cached --name-only --diff-filter=ACMR -- "src/" ;;
-    --since-head)
-      git diff --name-only --diff-filter=ACMR HEAD~1 -- "src/" ;;
-    --all)
-      echo "__ALL__" ;;
-    *)
-      echo "Unknown mode: $MODE" >&2; exit 2 ;;
+    --staged)     git diff --cached --name-only --diff-filter=ACMR -- "$1/" ;;
+    --since-head) git diff --name-only --diff-filter=ACMR HEAD~1 -- "$1/" ;;
+    --all)        echo "__ALL__" ;;
+    *) echo "Unknown mode: $MODE" >&2; exit 2 ;;
   esac
 }
 
-CHANGED="$(collect)"
+ran=0
+for m in "${MODULES[@]}"; do
+  CH="$(changed_in "$m")"
+  if [[ "$MODE" == "--all" ]]; then
+    PROMPT="Full documentation pass for module '$m'. Read the source under ./$m and bring the pages under ./docs/$m up to date, following the architecture-docs skill. Create docs/$m pages if missing. Only edit files under ./docs/$m."
+  elif [[ -z "$CH" ]]; then
+    continue   # this module didn't change — skip it
+  else
+    PROMPT="Module '$m' changed files: $(echo "$CH" | tr '\n' ' '). Update the pages under ./docs/$m to match, following the architecture-docs skill. Only edit files under ./docs/$m."
+  fi
+  echo "▶ docs: $m"
+  opencode run --agent docs "$PROMPT"
+  ran=1
+done
 
-if [[ "$CHANGED" == "__ALL__" ]]; then
-  PROMPT="Do a full documentation pass. Review all source under ./src and bring every page in ./docs up to date, following the architecture-docs skill. Only edit files under ./docs."
-elif [[ -z "$CHANGED" ]]; then
-  echo "No source changes detected — docs unchanged."
-  exit 0
+if [[ "$ran" -eq 0 ]]; then
+  echo "No in-scope module changed — docs unchanged."
 else
-  PROMPT="These source files changed: $(echo "$CHANGED" | tr '\n' ' '). Update the affected pages under ./docs to match, following the architecture-docs skill. Only edit files under ./docs."
+  echo "✓ Docs refreshed."
 fi
-
-echo "▶ Running docs agent..."
-opencode run --agent docs "$PROMPT"
-echo "✓ Docs refreshed under ./docs"

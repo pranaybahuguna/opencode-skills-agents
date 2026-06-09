@@ -1,0 +1,9 @@
+# Modules in scope for documentation generation.
+# One module path per line, relative to the repo root.
+# Lines starting with # are ignored — comment a module out to skip it.
+
+order-service
+payment-service
+shared-domain
+# api-gateway
+# reporting-batch
