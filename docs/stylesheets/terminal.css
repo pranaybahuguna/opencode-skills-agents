@@ -217,6 +217,41 @@
   border: 1px solid var(--terminal-border);
   border-radius: 6px;
   padding: 1em;
+  overflow-x: auto;
+}
+
+.mermaid svg {
+  width: 100% !important;
+  height: auto !important;
+  max-width: 100%;
+}
+
+/* ── Zoom overlay ────────────────────────────────────────── */
+.mermaid-zoom-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(6, 8, 15, 0.92);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+}
+
+.mermaid-zoom-overlay svg {
+  border: 1px solid var(--terminal-teal, #00bfa5);
+  border-radius: 8px;
+  background: #111827;
+  padding: 2em;
+}
+
+.mermaid-zoom-hint {
+  margin-top: 1em;
+  color: #768390;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
 }
 
 /* ── Scrollbar (webkit) ──────────────────────────────────── */
