@@ -2,57 +2,25 @@ site_name: "[ APM Indus Docs ]"
 site_description: Living architecture documentation — maintained by OpenCode
 
 theme:
-  name: material
-  palette:
-    - scheme: slate
-      primary: custom
-      accent: custom
-      toggle:
-        icon: material/weather-sunny
-        name: Switch to light mode
-    - scheme: default
-      primary: custom
-      accent: custom
-      toggle:
-        icon: material/weather-night
-        name: Switch to dark mode
-  font:
-    text: Roboto
-    code: JetBrains Mono
-  icon:
-    logo: material/console
+  name: terminal
+  palette: dark
   features:
-    - navigation.sections
-    - navigation.expand
-    - navigation.top
-    - navigation.indexes
-    - content.code.copy
-    - content.code.annotate
-    - search.suggest
-    - search.highlight
-    - search.share
-
-extra_css:
-  - stylesheets/terminal.css
-
-extra_javascript:
-  - https://unpkg.com/mermaid@10/dist/mermaid.min.js
-  - js/mermaid-init.js
+    - footer.prev_next
+    - navigation.side.indexes
+    - style.links.underline.hide
 
 markdown_extensions:
   - admonition
   - tables
-  - attr_list
   - toc:
-      permalink: "§"
-  - pymdownx.highlight:
-      anchor_linenums: true
-  - pymdownx.inlinehilite
+      permalink: true
+  - pymdownx.highlight
   - pymdownx.details
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
           class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_div_format
-  - pymdownx.tabbed:
-      alternate_style: true
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js
