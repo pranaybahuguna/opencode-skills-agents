@@ -1,16 +1,22 @@
 var mermaidConfig = {
   startOnLoad: false,
-  theme: 'dark',
+  theme: 'base',
   securityLevel: 'loose',
   themeVariables: {
-    primaryColor:       '#1a2538',
-    primaryTextColor:   '#cdd9e5',
-    primaryBorderColor: '#00bfa5',
-    lineColor:          '#00bfa5',
-    secondaryColor:     '#0d1117',
-    background:         '#0b0f19',
-    edgeLabelBackground:'#0b0f19',
-    fontFamily:         'JetBrains Mono, monospace'
+    primaryColor:        '#e8f5ee',
+    primaryTextColor:    '#1a2e1a',
+    primaryBorderColor:  '#00693e',
+    lineColor:           '#00693e',
+    secondaryColor:      '#f0faf4',
+    tertiaryColor:       '#d4eddf',
+    background:          '#ffffff',
+    mainBkg:             '#e8f5ee',
+    nodeBorder:          '#00693e',
+    clusterBkg:          '#f0faf4',
+    clusterBorder:       '#00915a',
+    edgeLabelBackground: '#ffffff',
+    fontFamily:          'Roboto, sans-serif',
+    fontSize:            '14px'
   }
 }
 
