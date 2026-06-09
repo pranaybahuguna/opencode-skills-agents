@@ -1,40 +1,58 @@
-site_name: Living Architecture Docs
-site_description: Auto-maintained by the OpenCode docs agent
+site_name: "[ APM Indus Docs ]"
+site_description: Living architecture documentation — maintained by OpenCode
 
 theme:
   name: material
+  palette:
+    # Default: dark terminal mode
+    - scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+    - scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+  font:
+    text: Roboto
+    code: JetBrains Mono
+  icon:
+    logo: material/console
+    repo: fontawesome/brands/github
   features:
     - navigation.sections
     - navigation.expand
     - navigation.top
+    - navigation.indexes
     - content.code.copy
+    - content.code.annotate
     - search.suggest
-  palette:
-    - scheme: default
-      primary: indigo
-      toggle:
-        icon: material/weather-night
-        name: Dark mode
-    - scheme: slate
-      primary: indigo
-      toggle:
-        icon: material/weather-sunny
-        name: Light mode
+    - search.highlight
+    - search.share
+
+extra_css:
+  - stylesheets/terminal.css
 
 markdown_extensions:
   - admonition
   - tables
+  - attr_list
   - toc:
-      permalink: true
-  - pymdownx.highlight
+      permalink: "§"
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.details
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
-
-nav:
-  - Overview: index.md
-  - Architecture: architecture/overview.md
-  - Orders:
-      - Order Service: orders/order-service.md
+  - pymdownx.tabbed:
+      alternate_style: true

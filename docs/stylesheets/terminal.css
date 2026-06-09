@@ -1,0 +1,236 @@
+/* ============================================================
+   Terminal Theme — APM Indus Docs
+   Dark background · Teal/cyan accents · Green code
+   Drop this file at: docs/stylesheets/terminal.css
+   ============================================================ */
+
+/* ── Custom colour tokens ─────────────────────────────────── */
+:root {
+  --terminal-bg:          #0b0f19;
+  --terminal-bg-surface:  #111827;
+  --terminal-bg-code:     #0d1117;
+  --terminal-border:      #1f2d3d;
+  --terminal-teal:        #00bfa5;
+  --terminal-teal-bright: #00e5cc;
+  --terminal-green:       #39d353;
+  --terminal-cyan:        #58d9f9;
+  --terminal-text:        #cdd9e5;
+  --terminal-text-muted:  #768390;
+  --terminal-heading:     #e6edf3;
+  --terminal-link:        #00bfa5;
+  --terminal-link-hover:  #00e5cc;
+}
+
+/* ── Material primary / accent overrides ─────────────────── */
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color:          var(--terminal-teal);
+  --md-primary-fg-color--light:   var(--terminal-teal-bright);
+  --md-primary-fg-color--dark:    #008f79;
+  --md-primary-bg-color:          var(--terminal-bg);
+  --md-primary-bg-color--light:   var(--terminal-bg-surface);
+
+  --md-accent-fg-color:           var(--terminal-teal-bright);
+  --md-accent-fg-color--transparent: rgba(0, 191, 165, 0.1);
+
+  --md-default-bg-color:          var(--terminal-bg);
+  --md-default-bg-color--light:   var(--terminal-bg-surface);
+  --md-default-bg-color--lighter: #131c2e;
+  --md-default-bg-color--lightest:#1a2538;
+
+  --md-default-fg-color:          var(--terminal-text);
+  --md-default-fg-color--light:   var(--terminal-text-muted);
+  --md-default-fg-color--lighter: #4a5568;
+  --md-default-fg-color--lightest:#2d3748;
+
+  --md-code-bg-color:             var(--terminal-bg-code);
+  --md-code-fg-color:             var(--terminal-green);
+
+  --md-typeset-a-color:           var(--terminal-link);
+
+  --md-footer-bg-color:           #08101a;
+  --md-footer-bg-color--dark:     #060c14;
+}
+
+/* Light mode — keep it professional but warm */
+[data-md-color-scheme="default"] {
+  --md-primary-fg-color:          #007a6b;
+  --md-primary-fg-color--light:   #00bfa5;
+  --md-primary-fg-color--dark:    #005a4e;
+  --md-primary-bg-color:          #ffffff;
+  --md-accent-fg-color:           #00bfa5;
+  --md-typeset-a-color:           #007a6b;
+}
+
+/* ── Page background & body ──────────────────────────────── */
+[data-md-color-scheme="slate"] .md-main {
+  background-color: var(--terminal-bg);
+}
+
+[data-md-color-scheme="slate"] .md-content__inner {
+  background-color: var(--terminal-bg);
+}
+
+/* ── Header ──────────────────────────────────────────────── */
+[data-md-color-scheme="slate"] .md-header {
+  background-color: #06080f;
+  border-bottom: 1px solid var(--terminal-border);
+  box-shadow: none;
+}
+
+[data-md-color-scheme="slate"] .md-header__title {
+  color: var(--terminal-teal);
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+/* ── Left sidebar / navigation ───────────────────────────── */
+[data-md-color-scheme="slate"] .md-nav {
+  background-color: var(--terminal-bg-surface);
+}
+
+[data-md-color-scheme="slate"] .md-sidebar {
+  background-color: var(--terminal-bg-surface);
+  border-right: 1px solid var(--terminal-border);
+}
+
+[data-md-color-scheme="slate"] .md-nav__title {
+  color: var(--terminal-teal);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+[data-md-color-scheme="slate"] .md-nav__link {
+  color: var(--terminal-text-muted);
+  transition: color 0.15s ease;
+}
+
+[data-md-color-scheme="slate"] .md-nav__link:hover,
+[data-md-color-scheme="slate"] .md-nav__link:focus {
+  color: var(--terminal-teal-bright);
+}
+
+[data-md-color-scheme="slate"] .md-nav__link--active {
+  color: var(--terminal-teal) !important;
+  font-weight: 600;
+}
+
+[data-md-color-scheme="slate"] .md-nav__item--active > .md-nav__link {
+  color: var(--terminal-teal-bright);
+}
+
+/* ── Headings ────────────────────────────────────────────── */
+[data-md-color-scheme="slate"] .md-typeset h1 {
+  color: var(--terminal-heading);
+  border-bottom: 1px solid var(--terminal-teal);
+  padding-bottom: 0.4em;
+  font-family: "JetBrains Mono", monospace;
+}
+
+[data-md-color-scheme="slate"] .md-typeset h2 {
+  color: var(--terminal-teal);
+  font-family: "JetBrains Mono", monospace;
+}
+
+[data-md-color-scheme="slate"] .md-typeset h3 {
+  color: var(--terminal-cyan);
+}
+
+[data-md-color-scheme="slate"] .md-typeset h1::before { content: "# ";  color: var(--terminal-teal); }
+[data-md-color-scheme="slate"] .md-typeset h2::before { content: "## "; color: var(--terminal-teal); opacity: 0.6; }
+
+/* ── Code blocks ─────────────────────────────────────────── */
+[data-md-color-scheme="slate"] .md-typeset code {
+  background-color: var(--terminal-bg-code);
+  color: var(--terminal-green);
+  border: 1px solid var(--terminal-border);
+  border-radius: 3px;
+  font-size: 0.88em;
+}
+
+[data-md-color-scheme="slate"] .md-typeset pre {
+  background-color: var(--terminal-bg-code);
+  border: 1px solid var(--terminal-border);
+  border-left: 3px solid var(--terminal-teal);
+  border-radius: 4px;
+}
+
+[data-md-color-scheme="slate"] .md-typeset pre > code {
+  color: var(--terminal-green);
+  border: none;
+  background: transparent;
+}
+
+/* ── Tables ──────────────────────────────────────────────── */
+[data-md-color-scheme="slate"] .md-typeset table:not([class]) th {
+  background-color: #0a1628;
+  color: var(--terminal-teal);
+  border-bottom: 2px solid var(--terminal-teal);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+[data-md-color-scheme="slate"] .md-typeset table:not([class]) tr:hover {
+  background-color: rgba(0, 191, 165, 0.05);
+}
+
+[data-md-color-scheme="slate"] .md-typeset table:not([class]) td,
+[data-md-color-scheme="slate"] .md-typeset table:not([class]) th {
+  border-color: var(--terminal-border);
+}
+
+/* ── Admonitions ─────────────────────────────────────────── */
+[data-md-color-scheme="slate"] .md-typeset .admonition {
+  background-color: var(--terminal-bg-surface);
+  border-color: var(--terminal-teal);
+  border-radius: 4px;
+}
+
+[data-md-color-scheme="slate"] .md-typeset .admonition-title {
+  background-color: rgba(0, 191, 165, 0.1);
+  font-family: "JetBrains Mono", monospace;
+}
+
+/* ── Search ──────────────────────────────────────────────── */
+[data-md-color-scheme="slate"] .md-search__form {
+  background-color: var(--terminal-bg-surface);
+  border: 1px solid var(--terminal-border);
+}
+
+[data-md-color-scheme="slate"] .md-search__input {
+  color: var(--terminal-text);
+}
+
+/* ── Footer ──────────────────────────────────────────────── */
+[data-md-color-scheme="slate"] .md-footer {
+  background-color: #06080f;
+  border-top: 1px solid var(--terminal-border);
+}
+
+/* ── Mermaid diagram overrides ───────────────────────────── */
+[data-md-color-scheme="slate"] .mermaid {
+  background-color: var(--terminal-bg-surface) !important;
+  border: 1px solid var(--terminal-border);
+  border-radius: 6px;
+  padding: 1em;
+}
+
+/* ── Scrollbar (webkit) ──────────────────────────────────── */
+[data-md-color-scheme="slate"] ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+[data-md-color-scheme="slate"] ::-webkit-scrollbar-track {
+  background: var(--terminal-bg);
+}
+[data-md-color-scheme="slate"] ::-webkit-scrollbar-thumb {
+  background: var(--terminal-border);
+  border-radius: 3px;
+}
+[data-md-color-scheme="slate"] ::-webkit-scrollbar-thumb:hover {
+  background: var(--terminal-teal);
+}
