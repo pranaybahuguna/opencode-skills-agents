@@ -1,58 +1,29 @@
-site_name: "[ APM Indus Docs ]"
+site_name: APM Indus Docs
 site_description: Living architecture documentation — maintained by OpenCode
 
 theme:
-  name: material
-  palette:
-    # Default: dark terminal mode
-    - scheme: slate
-      primary: custom
-      accent: custom
-      toggle:
-        icon: material/weather-sunny
-        name: Switch to light mode
-    - scheme: default
-      primary: custom
-      accent: custom
-      toggle:
-        icon: material/weather-night
-        name: Switch to dark mode
-  font:
-    text: Roboto
-    code: JetBrains Mono
-  icon:
-    logo: material/console
-    repo: fontawesome/brands/github
+  name: terminal
+  palette: dark
   features:
-    - navigation.sections
-    - navigation.expand
-    - navigation.top
-    - navigation.indexes
-    - content.code.copy
-    - content.code.annotate
-    - search.suggest
-    - search.highlight
-    - search.share
-
-extra_css:
-  - stylesheets/terminal.css
+    - footer.prev_next
+    - navigation.side.indexes
+    - style.links.underline.hide
 
 markdown_extensions:
   - admonition
   - tables
-  - attr_list
   - toc:
-      permalink: "§"
-  - pymdownx.highlight:
-      anchor_linenums: true
-      line_spans: __span
-      pygments_lang_class: true
-  - pymdownx.inlinehilite
+      permalink: true
+  - pymdownx.highlight
   - pymdownx.details
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
-  - pymdownx.tabbed:
-      alternate_style: true
+
+# Mermaid diagram rendering
+# Note: if the CDN is blocked on your corporate network,
+# download mermaid.min.js locally and change this to: - js/mermaid.min.js
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js
