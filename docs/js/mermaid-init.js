@@ -3,18 +3,34 @@ var mermaidConfig = {
   theme: 'base',
   securityLevel: 'loose',
   themeVariables: {
-    primaryColor:        '#e8f5ee',
-    primaryTextColor:    '#1a2e1a',
+    // Base
+    background:          '#ffffff',
+    primaryColor:        '#e6f4ec',
+    primaryTextColor:    '#0d1f0d',
     primaryBorderColor:  '#00693e',
     lineColor:           '#00693e',
-    secondaryColor:      '#f0faf4',
-    tertiaryColor:       '#d4eddf',
-    background:          '#ffffff',
-    mainBkg:             '#e8f5ee',
-    nodeBorder:          '#00693e',
-    clusterBkg:          '#f0faf4',
+    // Node fills — cycles through cScale0..cScale4 for varied diagrams
+    // BNPP deep green
+    cScale0:             '#e6f4ec',
+    cScale0Peer:         '#00693e',
+    // Amber / warm gold complement
+    cScale1:             '#fff8e6',
+    cScale1Peer:         '#b45309',
+    // Navy / slate complement
+    cScale2:             '#eef2f9',
+    cScale2Peer:         '#1e3a5f',
+    // Teal — adjacent to green
+    cScale3:             '#e6f7f9',
+    cScale3Peer:         '#0e7490',
+    // Sage — lighter BNPP green
+    cScale4:             '#f0faf4',
+    cScale4Peer:         '#00915a',
+    // Cluster / subgraph
+    clusterBkg:          '#f5fdf8',
     clusterBorder:       '#00915a',
     edgeLabelBackground: '#ffffff',
+    secondaryColor:      '#fff8e6',
+    tertiaryColor:       '#eef2f9',
     fontFamily:          'Roboto, sans-serif',
     fontSize:            '14px'
   }
