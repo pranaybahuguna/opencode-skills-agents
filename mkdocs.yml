@@ -35,10 +35,6 @@ theme:
 extra_css:
   - stylesheets/terminal.css
 
-extra_javascript:
-  - https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js
-  - js/mermaid-init.js
-
 markdown_extensions:
   - admonition
   - tables
@@ -53,6 +49,6 @@ markdown_extensions:
       custom_fences:
         - name: mermaid
           class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_div_format
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.tabbed:
       alternate_style: true
