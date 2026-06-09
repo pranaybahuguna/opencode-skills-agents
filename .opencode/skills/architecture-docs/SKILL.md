@@ -103,7 +103,7 @@ from the HTTP entry point to the final side effect (DB write, response, event).
 - Show the error path if the exception handling is non-trivial
 
 **Example of what this should look like:**
-```
+```mermaid
 sequenceDiagram
     Client->>EligibilityController: POST /v1/eligibility (EligibilityRequest)
     EligibilityController->>EligibilityService: evaluate(request)
